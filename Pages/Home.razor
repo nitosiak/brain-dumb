@@ -1,0 +1,65 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+<p>output @output</p>
+<button @onclick="ChangeInput">input @input</button>
+<button @onclick="run">run</button>
+<input type="text" name="code" @bind="@codeString"/>
+@code {
+    bool[] bytes = new bool[41];
+    bool input = false;
+    bool output = false;
+    int currentByte = 0;
+    string codeString;
+
+    void run()
+    {
+        char[] code = codeString.ToCharArray();
+        foreach (char c in code)
+        {
+            if (c == '>')
+            {
+                if (currentByte == 40)
+                {
+                    currentByte = 0;
+                }
+                else
+                {
+                    currentByte++;
+                }
+            }
+            if (c == '<')
+            {
+                if (currentByte == 0)
+                {
+                    currentByte = 40;
+                }
+                else
+                {
+                    currentByte--;
+                }
+            }
+            if(c == '=')
+            {
+                bytes[currentByte] = !bytes[currentByte];
+            }
+            if (c ==';'){
+                if (input)
+                {
+                    bytes[currentByte] = !bytes[currentByte];
+                }
+            }
+            if (c == ',')
+            {
+                if (bytes[currentByte])
+                {
+                    output = !output;
+                }
+            }
+        }
+    }
+    void ChangeInput()
+    {
+        input = !input;
+    }
+}
